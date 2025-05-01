@@ -185,8 +185,9 @@ uvicorn run:app --reload
 project/
 ├── app/
 │   ├── __init__.py
+│   ├── main.py
 │   ├── models.py
-│   ├── routes.py
+│   ├── schemas.py
 ├── data/
 │   └── survey_lung_cancer.csv
 ├── models/
