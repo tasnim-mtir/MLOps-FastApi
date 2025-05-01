@@ -1,4 +1,3 @@
-Sure! Here's the **clean, professional version** of your updated README for the **FastAPI** version of your lung cancer prediction project:
 
 ---
 
@@ -66,7 +65,7 @@ This sends a `POST` request to the `/api/predict` endpoint using default or cust
 
 To use custom features, modify the `FEATURES` variable in the Makefile:
 ```bash
-FEATURES = [55, 1, 1, 2, 2, 1, 2, 1, 2, 1, 2, 1]
+FEATURES = "[55, 1, 1, 2, 2, 1, 2, 1, 2, 1, 2, 1]"
 ```
 
 ### 5. Clean Environment
@@ -192,7 +191,6 @@ project/
 │   └── survey_lung_cancer.csv
 ├── models/
 │   ├── best_gboost_model.pkl
-│   ├── feature_names.pkl (if used)
 ├── requirements.txt
 ├── run.py
 ├── Makefile
