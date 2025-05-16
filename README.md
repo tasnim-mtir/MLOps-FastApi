@@ -1,24 +1,28 @@
 
+
 ---
 
-# Lung Cancer Prediction API with Makefile Automation (FastAPI Version)
+# Lung Cancer Prediction API with Makefile Automation (FastAPI + MLflow)
 
-This project provides an automated pipeline for training and deploying a lung cancer prediction model using **Gradient Boosting** and **FastAPI**. A Makefile is included to streamline environment setup, model training, prediction, and cleanup.
+This project provides an automated pipeline for training and deploying a lung cancer prediction model using **Gradient Boosting**, **FastAPI**, and **MLflow**. A Makefile is included to streamline environment setup, model training, prediction, and cleanup.
 
 ---
 
 ## Features
 
-- **Makefile Automation**  
+* **Makefile Automation**
   Simplifies setup, training, prediction, and cleanup through terminal commands.
 
-- **Gradient Boosting Classifier**  
+* **Gradient Boosting Classifier**
   A robust and accurate model for lung cancer classification.
 
-- **FastAPI REST API**  
+* **FastAPI REST API**
   Lightweight, high-performance backend for model interaction.
 
-- **Data Preprocessing**  
+* **MLflow Tracking**
+  Automatically logs experiments, parameters, metrics, and models.
+
+* **Data Preprocessing**
   Includes cleaning, feature extraction, and class imbalance correction.
 
 ---
@@ -43,17 +47,30 @@ make run
 
 Starts the FastAPI development server using Uvicorn.
 
-### 3. Train the Model
+### 3. Train the Model (with MLflow tracking)
 
 ```bash
 make train
 ```
 
-This command sends a `POST` request to the `/api/train` endpoint.
+Sends a `POST` request to the `/api/train` endpoint. MLflow will automatically track:
+
+* Hyperparameters
+* Accuracy and metrics
+* Model artifact
 
 Optional arguments can be set by modifying the `Makefile`:
-- `DATA_PATH`: Path to the dataset CSV file
-- `MODEL_PATH`: Output path for the trained model
+
+* `DATA_PATH`: Path to the dataset CSV file
+* `MODEL_PATH`: Output path for the trained model
+
+You can launch the MLflow UI using:
+
+```bash
+mlflow ui
+```
+
+Then visit: [http://localhost:5000](http://localhost:5000)
 
 ### 4. Make a Prediction
 
@@ -61,9 +78,10 @@ Optional arguments can be set by modifying the `Makefile`:
 make predict
 ```
 
-This sends a `POST` request to the `/api/predict` endpoint using default or customized features.
+Sends a `POST` request to the `/api/predict` endpoint using default or customized features.
 
 To use custom features, modify the `FEATURES` variable in the Makefile:
+
 ```bash
 FEATURES = "[55, 1, 1, 2, 2, 1, 2, 1, 2, 1, 2, 1]"
 ```
@@ -75,8 +93,9 @@ make clean
 ```
 
 Removes:
-- `venv/`
-- `__pycache__/`
+
+* `venv/`
+* `__pycache__/`
 
 ---
 
@@ -84,9 +103,10 @@ Removes:
 
 ### 1. Train Model
 
-- **Endpoint**: `/api/train`  
-- **Method**: `POST`  
-- **Request Body**:
+* **Endpoint**: `/api/train`
+* **Method**: `POST`
+* **Request Body**:
+
 ```json
 {
   "data_path": "data/survey_lung_cancer.csv",
@@ -94,7 +114,8 @@ Removes:
 }
 ```
 
-- **Response**:
+* **Response**:
+
 ```json
 {
   "message": "Model trained successfully",
@@ -109,11 +130,18 @@ Removes:
 }
 ```
 
+✅ This training process is tracked via **MLflow**, which logs:
+
+* Parameters (`learning_rate`, `max_depth`, etc.)
+* Accuracy
+* Serialized model
+
 ### 2. Make Prediction
 
-- **Endpoint**: `/api/predict`  
-- **Method**: `POST`  
-- **Request Body**:
+* **Endpoint**: `/api/predict`
+* **Method**: `POST`
+* **Request Body**:
+
 ```json
 {
   "model_path": "models/best_gboost_model.pkl",
@@ -121,7 +149,8 @@ Removes:
 }
 ```
 
-- **Response**:
+* **Response**:
+
 ```json
 {
   "prediction": [1],
@@ -135,19 +164,19 @@ Removes:
 
 Your CSV dataset must include the following columns:
 
-- `AGE`  
-- `GENDER`  
-- `SMOKING`  
-- `ANXIETY`  
-- `YELLOW_FINGERS`  
-- `PEER_PRESSURE`  
-- `CHRONIC DISEASES`  
-- `FATIGUE`  
-- `ALLERGY`  
-- `WHEEZING`  
-- `ALCOHOL CONSUMPTION`  
-- `COUGHING`  
-- `LUNG_CANCER` (Target: 0 = Absent, 1 = Present)
+* `AGE`
+* `GENDER`
+* `SMOKING`
+* `ANXIETY`
+* `YELLOW_FINGERS`
+* `PEER_PRESSURE`
+* `CHRONIC DISEASES`
+* `FATIGUE`
+* `ALLERGY`
+* `WHEEZING`
+* `ALCOHOL CONSUMPTION`
+* `COUGHING`
+* `LUNG_CANCER` (Target: 0 = Absent, 1 = Present)
 
 ---
 
@@ -177,6 +206,12 @@ pip install -r requirements.txt
 uvicorn run:app --reload
 ```
 
+5. (Optional) Run MLflow UI:
+
+```bash
+mlflow ui
+```
+
 ---
 
 ## Project Structure
@@ -191,7 +226,7 @@ project/
 ├── data/
 │   └── survey_lung_cancer.csv
 ├── models/
-│   ├── best_gboost_model.pkl
+│   └── best_gboost_model.pkl
 ├── requirements.txt
 ├── run.py
 ├── Makefile
@@ -202,7 +237,7 @@ project/
 
 ## Author
 
-- Tasnim Mtir
+* Tasnim Mtir
 
 ---
 
@@ -210,13 +245,14 @@ project/
 
 This project leverages the following technologies:
 
-- [Scikit-learn](https://scikit-learn.org/)
-- [Imbalanced-learn](https://imbalanced-learn.org/)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Uvicorn](https://www.uvicorn.org/)
-- [Pandas](https://pandas.pydata.org/)
-- [Joblib](https://joblib.readthedocs.io/)
-- [Make](https://www.gnu.org/software/make/)
+* [Scikit-learn](https://scikit-learn.org/)
+* [Imbalanced-learn](https://imbalanced-learn.org/)
+* [FastAPI](https://fastapi.tiangolo.com/)
+* [Uvicorn](https://www.uvicorn.org/)
+* [Pandas](https://pandas.pydata.org/)
+* [Joblib](https://joblib.readthedocs.io/)
+* [Make](https://www.gnu.org/software/make/)
+* [MLflow](https://mlflow.org/)
 
 ---
 
